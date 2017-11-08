@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linear"
+    android:id="@+id/root"
+    style="@style/AppTheme.FitsSystemWindows"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.alibaba.chenyin.sophixtest.MainActivity">
+    android:background="@android:color/transparent"
+    tools:context=".MainActivity">
 
+    <!--<include layout="@layout/activity_toolbar" />-->
 
-    <!--<com.alibaba.chenyin.sophixtest.widget.CustomVideoView-->
-        <!--android:id="@+id/main_video_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginTop="@dimen/content_top_margin"-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
 
-</android.support.constraint.ConstraintLayout>
+    <!--<TextView-->
+    <!--android:id="@+id/tv_sdk"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@color/colorAccent"-->
+    <!--android:padding="16dp" />-->
+    <!--</RelativeLayout>-->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00aa00"
+        android:fitsSystemWindows="true"
+        />
+
+</android.support.design.widget.CoordinatorLayout>

@@ -41,7 +41,7 @@ import butterknife.ButterKnife;
  * Created by chenyin on 17/10/31.
  */
 
-public abstract class BaseActivity extends AppCompatActivity implements IBaseActivity, Toolbar.OnMenuItemClickListener {
+public abstract class BaseActivity extends AppCompatActivity implements IBaseActivity{
 
     private FragmentManager fragmentManager;//Fragment管理器
 
@@ -50,12 +50,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseAct
     private boolean isStarted;//记录是否已经调用过onStart方法
 
     private List<Fragment> addedFragments;//保存通过addFragment方法添加的Fragment
-
-    private Toolbar toolbar;//Design风格Toolbar控件
-
-    private View toolbarMenuView;//Toolbar添加的自定义布局
-
-    public TextView toolbarTitle;//标题
 
     private View view;//当前activity的view
 
@@ -66,29 +60,11 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseAct
     @Override
     final protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e(TAG,"onCreate.......创建");
-        //当系统版本为4.4或者4.4以上时可以使用沉浸式状态栏
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
+        Log.e(TAG, "onCreate.......创建");
         if (getContentViewLayoutResId() > 0) {
             view = LayoutInflater.from(this).inflate(getContentViewLayoutResId(), null);
             setContentView(view);
             ButterKnife.bind(this);
-            //设置ToolBar
-            View v = findViewById(getToolbarResId());
-//            if (v != null) {
-//                toolbar = (Toolbar) v;
-//                toolbar.setPadding(0, statusHeight, 0, 0);
-//                setSupportActionBar(toolbar);
-//                toolbarTitle = (TextView) v.findViewById(R.id.toolbar_title);
-//                if (toolbarTitle != null) {
-//                    getSupportActionBar().setDisplayShowTitleEnabled(false);
-//                }
-//            }
         }
         this.savedInstanceState = savedInstanceState;
         isStarted = true;
@@ -110,7 +86,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseAct
     @Override
     protected void onStart() {
         super.onStart();
-        Log.e(TAG,"onStart.......启动");
+        Log.e(TAG, "onStart.......启动");
         if (isStarted) {
             initView(savedInstanceState);
             // 添加Fragment到Activity中
@@ -124,7 +100,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseAct
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e(TAG,"onResume.......完成");
+        Log.e(TAG, "onResume.......完成");
         // 竖屏显示
         if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -134,25 +110,25 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseAct
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e(TAG,"onPause.......休眠");
+        Log.e(TAG, "onPause.......休眠");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.e(TAG,"onStop.......停止");
+        Log.e(TAG, "onStop.......停止");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.e(TAG,"onRestart.......重启");
+        Log.e(TAG, "onRestart.......重启");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e(TAG,"onDestroy.......销毁");
+        Log.e(TAG, "onDestroy.......销毁");
         if (hasFragment()) {
 //            LogUtil.d("原来有添加过Fragment...");
             // 清空已经添加的Fragment
@@ -178,33 +154,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseAct
                     fragment.onActivityResult(requestCode, resultCode, data);
             }
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        final int menuId = getToolbarMenuId();
-        if (menuId > 0) {
-            getMenuInflater().inflate(menuId, menu);
-            // 自定义ToolBar menu布局
-            final int layoutResId = getToolbarMenuLayoutResId();
-            if (layoutResId > 0) {
-                toolbarMenuView = LayoutUtil.inflate(this, layoutResId);
-                // 需要API 11无法兼容低版本
-                // menu.findItem(0).setActionView(toolbarMenuView);
-                // 解决低版本兼容问题，使用v4包的MenuItemCompat类
-                final int menuResId = getToolbarMenuResId();
-                MenuItem menuItem = menu.findItem(menuResId);
-                MenuItemCompat.setActionView(menuItem, toolbarMenuView);
-                initToolbarMenuActionView(toolbarMenuView);
-            }
-        }
-        return true;
-    }
-
-
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        return onToolbarMenuItemClick(item.getItemId(), item);
     }
 
     @Override
@@ -529,16 +478,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseAct
 
     @Override
     public void initView(@NonNull Bundle savedInstanceState) {
-        if (ObjectUtil.notNull(toolbar)) {
-            setSupportActionBar(toolbar);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onToolbarNavigationClick();
-                }
-            });
-            toolbar.setOnMenuItemClickListener(this);
-        }
+
     }
 
     @Override
@@ -571,30 +511,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseAct
         return null;
     }
 
-    @Override
-    public int getToolbarResId() {
-        return 0;
-    }
-
-    @Override
-    public int getToolbarMenuLayoutResId() {
-        return 0;
-    }
-
-    @Override
-    public int getToolbarMenuResId() {
-        return 0;
-    }
-
-    @Override
-    public int getToolbarMenuId() {
-        return 0;
-    }
-
-    @Override
-    public void onToolbarNavigationClick() {
-
-    }
 
     /**
      * 判断Activity中是否有Fragment
@@ -704,20 +620,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseAct
         }
     }
 
-    public void initToolbarMenuActionView(@NonNull View actionView) {
-
-    }
-
-    /**
-     * Toolbar Menu item点击事件回调
-     *
-     * @param menuId menu资源ID
-     * @param item   MenuItem对象
-     * @return
-     */
-    public boolean onToolbarMenuItemClick(@IdRes int menuId, @NonNull MenuItem item) {
-        return false;
-    }
 
     public void onBackKeyClick(int flag) {
         this.finish();

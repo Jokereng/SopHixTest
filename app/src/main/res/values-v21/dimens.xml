@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="toolbar_only_top">0dp</dimen>
+    <dimen name="appbar_top_padding">@dimen/p50</dimen>
+</resources>

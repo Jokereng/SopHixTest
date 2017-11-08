@@ -32,14 +32,4 @@ public interface IBaseActivity {
 
     String getFragmentTag();
 
-    int getToolbarResId();
-
-    int getToolbarMenuLayoutResId();
-
-    int getToolbarMenuResId();
-
-    int getToolbarMenuId();
-
-    void onToolbarNavigationClick();
-
 }
